@@ -25,7 +25,7 @@ class Node:
     for i in range(0,len(self.children)):
       self.children[i].children = self.children[0].children[:]
 
-  def pretty_print(self,current_layer_number,node_per_layer_map):
+  def output_children(self,current_layer_number,node_per_layer_map):
     indent = '    ' * current_layer_number 
 
     #when to stop Recursion
@@ -40,24 +40,24 @@ class Node:
         except:
           pass
 
-        self.children[i].pretty_print(current_layer_number+1,node_per_layer_map)
+        self.children[i].output_children(current_layer_number+1,node_per_layer_map)
 
     return
 
-  def set_random_weights(self,current_layer_number,node_per_layer_map):
+  def adjust_children_weights(self,current_layer_number,node_per_layer_map):
     #when to stop recursion
     if current_layer_number >= len(node_per_layer_map):
       return
     self.weight = [0.0] * len(self.children)
     for i in range(len(self.children)):
       self.weight[i] = random.uniform(0,1)
-      self.children[i].set_random_weights(current_layer_number+1,node_per_layer_map)
+      self.children[i].adjust_children_weights(current_layer_number+1,node_per_layer_map)
 
     return 
 
 new_node = Node()
 new_node.make_children(0,NODE_COUNT_PER_LAYER)
-new_node.pretty_print(0,NODE_COUNT_PER_LAYER)
-print("AFTER Weights")
-new_node.set_random_weights(0,NODE_COUNT_PER_LAYER)
-new_node.pretty_print(0,NODE_COUNT_PER_LAYER)
+new_node.output_children(0,NODE_COUNT_PER_LAYER)
+print("\nAFTER ADJUSTING CHILDREN WEIGHTS:\n")
+new_node.adjust_children_weights(0,NODE_COUNT_PER_LAYER)
+new_node.output_children(0,NODE_COUNT_PER_LAYER)
